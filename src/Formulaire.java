@@ -101,7 +101,6 @@ public class Formulaire {
 		JPanel panel = new JPanel();
 		BoxLayout box = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
 		panel.setLayout(box);
-		panel.add(new JLabel(tb.getName()));
 		
 		JPanel colContainer = new JPanel();
 		colContainer.setLayout(new BoxLayout(colContainer, BoxLayout.PAGE_AXIS));
@@ -109,7 +108,6 @@ public class Formulaire {
 		final List<JTextField> fields = new ArrayList<JTextField>();
 		for(Column col : tb.getColumns()){
 			JPanel singleCol = new JPanel();
-			singleCol.setBackground(Color.white);
 			JLabel label = new JLabel(col.getName());
 			label.setPreferredSize(new Dimension(120, 30));
 			JTextField txtField = new JTextField();
@@ -135,7 +133,7 @@ public class Formulaire {
         });
 		
 		panel.add(buttonAdd);
-		panel.add(Box.createVerticalGlue());
+		panel.add(Box.createVerticalStrut(600));
 		container.add(panel, BorderLayout.CENTER);
 		container.revalidate();
 	}
