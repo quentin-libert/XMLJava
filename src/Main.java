@@ -1,4 +1,9 @@
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -7,12 +12,15 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.List;
 
 public class Main {
 
@@ -72,7 +80,7 @@ public class Main {
         JMenu help = new JMenu("?");
 
         JMenuItem fileNew = new JMenuItem("Nouveau", iconNew);
-        fileNew.setToolTipText("Créer un nouveau fichier");
+        fileNew.setToolTipText("Crï¿½er un nouveau fichier");
         fileNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
         
         fileNew.addActionListener(new ActionListener() {
@@ -148,12 +156,14 @@ public class Main {
     }
 	
 	public void newFile() {
-		JOptionPane.showMessageDialog(null,"Afin de créer votre nouvelle base de données, merci de sélectionner un fichier xml de structure de type Module 1");
+		JOptionPane.showMessageDialog(null,"Afin de crï¿½er votre nouvelle base de donnï¿½es, merci de sï¿½lectionner un fichier xml de structure de type Module 1");
 		xml = new MyFileChooser();
 		xml.chooseXML();
 		
 		// CREATION DES FORMULAIRES
-		new Formulaire(new Parser(xml.fichier));
+		Formulaire form = new Formulaire(new Parser(xml.fichier));
+		form.BuildUI(frame);
+
 	}
 	
 	public void openFile() {
@@ -162,7 +172,7 @@ public class Main {
 	}
 	
 	public void saveFile() {
-		JOptionPane.showMessageDialog(null, "Tu as lancé la fonction \"Save\"");
+		JOptionPane.showMessageDialog(null, "Tu as lancï¿½ la fonction \"Save\"");
 	}
 	
 	public void saveAsFile() {
@@ -175,7 +185,7 @@ public class Main {
 	}
 	
 	public void infosApp() {
-		JOptionPane.showMessageDialog(null, "Tu as lancé la fonction \"infosApp\"");
+		JOptionPane.showMessageDialog(null, "Tu as lancï¿½ la fonction \"infosApp\"");
 	}
 
 }
