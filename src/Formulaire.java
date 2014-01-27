@@ -1,13 +1,17 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -91,6 +95,49 @@ public class Formulaire {
 		
 		frame.setContentPane(grid);
 		frame.setVisible(true);
+	}
+	
+	public void BuildUIForSingleTable(JPanel container, Table tb){
+		JPanel panel = new JPanel();
+		BoxLayout box = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
+		panel.setLayout(box);
+		panel.add(new JLabel(tb.getName()));
+		
+		JPanel colContainer = new JPanel();
+		colContainer.setLayout(new BoxLayout(colContainer, BoxLayout.PAGE_AXIS));
+		
+		final List<JTextField> fields = new ArrayList<JTextField>();
+		for(Column col : tb.getColumns()){
+			JPanel singleCol = new JPanel();
+			singleCol.setBackground(Color.white);
+			JLabel label = new JLabel(col.getName());
+			label.setPreferredSize(new Dimension(120, 30));
+			JTextField txtField = new JTextField();
+			fields.add(txtField);
+			txtField.setPreferredSize(new Dimension(180, 30));
+			singleCol.add(label);
+			singleCol.add(txtField);
+			colContainer.add(singleCol);
+		}
+		
+		panel.add(colContainer);
+		
+		JButton buttonAdd = new JButton("Add");
+		buttonAdd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	String values = "";
+            	for (JTextField field : fields){
+            		values += field.getText() + "|";
+            		field.setText("");
+            	}
+        		JOptionPane.showMessageDialog(null, values);
+            }
+        });
+		
+		panel.add(buttonAdd);
+		panel.add(Box.createVerticalGlue());
+		container.add(panel, BorderLayout.CENTER);
+		container.revalidate();
 	}
 	
 	public Parser getParser() {

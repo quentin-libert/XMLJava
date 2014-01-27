@@ -1,13 +1,14 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -18,6 +19,8 @@ import javax.swing.KeyStroke;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +29,10 @@ public class Main {
 
 	private JFrame frame;
 	private MyFileChooser xml;
+	private JComboBox<String> combo; 
+	private HashMap<String, Table> Tables;
+	private Formulaire form;
+	private JPanel container = new JPanel();
 
 	/**
 	 * Launch the application.
@@ -65,6 +72,11 @@ public class Main {
 		frame.setResizable(false);
 		frame.setBounds((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2 - 1280/2, (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()/2 - 800/2, 1280, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		container.setLayout(new BorderLayout());
+		container.setPreferredSize(new Dimension(frame.WIDTH, frame.HEIGHT));
+		
+		frame.setContentPane(container);
 	}
 	
 	public void createMenu() {
@@ -161,10 +173,39 @@ public class Main {
 		xml.chooseXML();
 		
 		// CREATION DES FORMULAIRES
-		Formulaire form = new Formulaire(new Parser(xml.fichier));
-		form.BuildUI(frame);
+		form = new Formulaire(new Parser(xml.fichier));
+		List<Table> tables = form.getParser().db.getTables();
+		Tables = new HashMap<String, Table>();
+		for(Table tb : tables){
+			Tables.put(tb.getName(), tb);
+		}
+
+		JPanel comboContainer = new JPanel();
+		comboContainer.setPreferredSize(new Dimension(frame.WIDTH, 30));
+		JLabel label = new JLabel("Chosir la table à modifier :");
+		label.setPreferredSize(new Dimension(180, 30));
+		combo = new JComboBox<String>();
+		combo.setPreferredSize(new Dimension(160, 30));
+		combo.addActionListener(new ItemAction());
+		for(Table table : tables){
+			combo.addItem(table.getName());
+		}
+		
+		comboContainer.add(label);
+		comboContainer.add(combo);
+		frame.getContentPane().add(comboContainer, BorderLayout.NORTH);
+		frame.setVisible(true);
+		
+		//form.BuildUI(frame);
 
 	}
+	
+	class ItemAction implements ActionListener{
+	    public void actionPerformed(ActionEvent e) {
+	    	form.BuildUIForSingleTable(container, Tables.get(combo.getSelectedItem()));
+	    	container.revalidate();
+	    }               
+	  }
 	
 	public void openFile() {
 		JFileChooser open = new JFileChooser(".");
