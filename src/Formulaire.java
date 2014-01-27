@@ -133,9 +133,9 @@ public class Formulaire {
         });
 		
 		panel.add(buttonAdd);
-		panel.add(Box.createVerticalStrut(600));
+		int height = ((tb.getColumns().size() * 30) + 30) * 4;
+		panel.add(Box.createVerticalStrut(height));
 		container.add(panel, BorderLayout.CENTER);
-		container.revalidate();
 	}
 	
 	public Parser getParser() {

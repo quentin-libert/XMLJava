@@ -1,5 +1,3 @@
-package XMLModule2_2013;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -10,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,6 +28,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+@SuppressWarnings("serial")
 public class XPathParser extends JFrame{
 
 	private JPanel XpathPanel;
@@ -37,15 +37,17 @@ public class XPathParser extends JFrame{
 	//file path
 	private String filePath;
 	
+	private File File;
+	
 	private JTextField Xpath;
 	
 	private static JTextArea area;
 	
 	private JButton button, clear;
 
-	public XPathParser(String filePath)
+	public XPathParser(File file)
 	{
-		this.filePath = filePath;
+		this.File = file;
 		init();
 	}
 	
@@ -118,7 +120,6 @@ public class XPathParser extends JFrame{
 		this.setTitle("XMLBdD administrator v1.0");
 		this.setSize(600, 400);
 		this.setVisible(true);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}	  
 	 
 	 //analyse le XPATH et affiche sur le textarea
@@ -126,8 +127,8 @@ public class XPathParser extends JFrame{
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = dbf.newDocumentBuilder();
-            InputStream in = XPathParser.class.getClassLoader().getResourceAsStream(filePath);
-            Document doc = builder.parse(in);
+            //InputStream in = XPathParser.class.getClassLoader().getResourceAsStream(filePath);
+            Document doc = builder.parse(File);
             XPathFactory factory = XPathFactory.newInstance();
             XPath xpath = factory.newXPath();
             XPathExpression expr = xpath.compile(path);
@@ -146,7 +147,4 @@ public class XPathParser extends JFrame{
             e.printStackTrace();
         }
     }	
-	    
-	}
-
-
+}

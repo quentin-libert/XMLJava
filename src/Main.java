@@ -87,6 +87,7 @@ public class Main {
         ImageIcon iconSave = new ImageIcon(Toolkit.getDefaultToolkit().getImage("icons/save.png"));
         ImageIcon iconSaveAs = new ImageIcon(Toolkit.getDefaultToolkit().getImage("icons/saveas.png"));
         ImageIcon iconExit = new ImageIcon(Toolkit.getDefaultToolkit().getImage("icons/exit.png"));
+        ImageIcon iconXPath = new ImageIcon(Toolkit.getDefaultToolkit().getImage("icons/X.png"));
 
         JMenu file = new JMenu("Fichier");
         JMenu help = new JMenu("?");
@@ -110,6 +111,17 @@ public class Main {
                 openFile();
             }
         });
+        
+        JMenuItem XPathQueries = new JMenuItem("Requêtes XPath", iconXPath);
+        fileOpen.setToolTipText("Exécuter des requêtes XPath sur fichier existant");
+        fileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+        
+        XPathQueries.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+            	XPathQueries();
+            }
+        });
+
 
         JMenuItem fileSave = new JMenuItem("Enregistrer", iconSave);
         fileSave.setToolTipText("Enregistrer le fichier courrant");
@@ -143,6 +155,7 @@ public class Main {
 
         file.add(fileNew);
         file.add(fileOpen);
+        file.add(XPathQueries);
         file.add(fileSave);
         file.add(fileSaveAs);
         file.addSeparator();
@@ -202,7 +215,8 @@ public class Main {
 	
 	class ItemAction implements ActionListener{
 	    public void actionPerformed(ActionEvent e) {
-	    	form.BuildUIForSingleTable(container, Tables.get(combo.getSelectedItem()));
+	    	Table table = Tables.get(combo.getSelectedItem());
+	    	form.BuildUIForSingleTable(container, table);
 	    	container.revalidate();
 	    }               
 	  }
@@ -210,6 +224,13 @@ public class Main {
 	public void openFile() {
 		JFileChooser open = new JFileChooser(".");
         open.showOpenDialog(null);
+	}
+	
+	public void XPathQueries(){
+		xml = new MyFileChooser();
+		xml.chooseXML();
+		XPathParser xparser = new XPathParser(xml.fichier);
+		xparser.setVisible(true);
 	}
 	
 	public void saveFile() {
