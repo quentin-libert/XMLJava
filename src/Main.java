@@ -1,5 +1,3 @@
-package XMLModule2_2013;
-
 import java.awt.EventQueue;
 
 import javax.swing.ImageIcon;
@@ -12,7 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import java.awt.Toolkit;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -20,6 +17,7 @@ import java.awt.event.KeyEvent;
 public class Main {
 
 	private JFrame frame;
+	private MyFileChooser xml;
 
 	/**
 	 * Launch the application.
@@ -150,12 +148,16 @@ public class Main {
     }
 	
 	public void newFile() {
-		JFileChooser open = new JFileChooser();
-        open.showOpenDialog(null);
+		JOptionPane.showMessageDialog(null,"Afin de créer votre nouvelle base de données, merci de sélectionner un fichier xml de structure de type Module 1");
+		xml = new MyFileChooser();
+		xml.chooseXML();
+		
+		// CREATION DES FORMULAIRES
+		new Formulaire(new Parser(xml.fichier));
 	}
 	
 	public void openFile() {
-		JFileChooser open = new JFileChooser();
+		JFileChooser open = new JFileChooser(".");
         open.showOpenDialog(null);
 	}
 	

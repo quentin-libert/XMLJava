@@ -1,11 +1,9 @@
-package XMLModule2_2013;
-
 import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
 public class FiltreSimple extends FileFilter{
-	   //Description et extension acceptée par le filtre
+
 	   private String description;
 	   private String extension;
 
