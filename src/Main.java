@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class Main {
 	private Formulaire form;
 	private JPanel container = new JPanel();
 	private DataBase runningDb;
+	private String runningFile;
 
 	/**
 	 * Launch the application.
@@ -189,7 +191,7 @@ public class Main {
 		xml.chooseXML();
 		
 		// CREATION DES FORMULAIRES
-		form = new Formulaire(new Parser(xml.fichier));
+		form = new Formulaire(new Parser(xml.fichier, false));
 		this.runningDb = form.getParser().db;
 		List<Table> tables = form.getParser().db.getTables();
 		Tables = new HashMap<String, Table>();
@@ -225,8 +227,34 @@ public class Main {
 	  }
 	
 	public void openFile() {
-		JFileChooser open = new JFileChooser(".");
-        open.showOpenDialog(null);
+		xml = new MyFileChooser();
+		xml.chooseExistingXML();
+		this.runningFile = xml.fichier.getAbsolutePath();
+		
+		form = new Formulaire(new Parser(xml.fichier, true));
+		this.runningDb = form.getParser().db;
+		List<Table> tables = form.getParser().db.getTables();
+		Tables = new HashMap<String, Table>();
+		for(Table tb : tables){
+			Tables.put(tb.getName(), tb);
+		}
+
+		JPanel comboContainer = new JPanel();
+		comboContainer.setPreferredSize(new Dimension(frame.WIDTH, 30));
+		JLabel label = new JLabel("Chosir la table à modifier :");
+		label.setPreferredSize(new Dimension(180, 30));
+		combo = new JComboBox<String>();
+		combo.setPreferredSize(new Dimension(160, 30));
+		combo.addActionListener(new ItemAction());
+		for(Table table : tables){
+			combo.addItem(table.getName());
+		}
+		
+		comboContainer.add(label);
+		comboContainer.add(combo);
+
+		frame.getContentPane().add(comboContainer, BorderLayout.NORTH);
+		frame.setVisible(true);
 	}
 	
 	public void XPathQueries(){
@@ -237,12 +265,21 @@ public class Main {
 	}
 	
 	public void saveFile() {
-		JOptionPane.showMessageDialog(null, "Tu as lancé la fonction \"Save\"");
+		if(runningFile != null && runningFile != ""){
+			File f = new File(runningFile);
+			if (f.exists()){
+				f.delete();
+				XMLBuilder builder = new XMLBuilder(runningDb);
+				this.runningFile = builder.BuildXMLFile(runningFile, true);
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Il n'y a aucun fichier en cours d'édition !");
+		}
 	}
 	
 	public void saveAsFile() {
 		xml = new MyFileChooser();
-		xml.chooseDirectoryToSave(runningDb);
+		this.runningFile = xml.chooseDirectoryToSave(runningDb);
 	}
 	
 	public void closeApp() {

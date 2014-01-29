@@ -18,7 +18,7 @@ public class XMLBuilder {
 		this.db = db;
 	}
 	
-	public void BuildXMLFile(String fileLocation){
+	public String BuildXMLFile(String fileLocation, Boolean editing){
 		try {
 			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();  
 			DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -42,15 +42,22 @@ public class XMLBuilder {
 				}
 			}
 			
+			String filePath;
+			if (!editing)
+				filePath = fileLocation + "/" + db.getDbName()+".xml";
+			else
+				filePath = fileLocation;
+			
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();  
 			Transformer transformer = transformerFactory.newTransformer();  
 			DOMSource domSource = new DOMSource(document);  
-			StreamResult streamResult = new StreamResult(new File(fileLocation + "/" + db.getDbName()+".xml"));  
+			StreamResult streamResult = new StreamResult(new File(filePath));  
 				  
 			transformer.transform(domSource, streamResult);  
-				  
+			return filePath;
 			
 		} catch (Exception e) {
+			return "";
 		}
 	}
 }
