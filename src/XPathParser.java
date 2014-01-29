@@ -1,3 +1,6 @@
+package XMLModule2_2013;
+
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -6,13 +9,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.xml.parsers.DocumentBuilder;
@@ -28,26 +37,22 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-@SuppressWarnings("serial")
 public class XPathParser extends JFrame{
 
 	private JPanel XpathPanel;
 	//Xpath
 	private static String path = "";
-	//file path
-	private String filePath;
 	
-	private File File;
-	
+	private static File file;
+
 	private JTextField Xpath;
 	
-	private static JTextArea area;
+	private static JTextArea area, resultArea;
 	
-	private JButton button, clear;
-
-	public XPathParser(File file)
+	private JButton button, clear, open;
+	
+	public XPathParser()
 	{
-		this.File = file;
 		init();
 	}
 	
@@ -88,8 +93,14 @@ public class XPathParser extends JFrame{
 		area.setEditable(false);
 		area.setBackground(Color.WHITE);
 		
+		
+		resultArea = new JTextArea("", 15, 50);
+		resultArea.setEditable(false);
+		resultArea.setBackground(Color.WHITE);
+		
 		button = new JButton();
 		button.setText("Enter");
+		button.setEnabled(false);
 		button.addActionListener(
 				new ActionListener() {
 					@Override
@@ -100,43 +111,97 @@ public class XPathParser extends JFrame{
 					}
 			} );
 		
+		open = new JButton();
+		open.setText("OPEN");
+		open.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				openFile();
+				FileInputStream fileInputStream;
+				String tmp = "";
+				try {
+					fileInputStream = new FileInputStream(file);
+					InputStream in = fileInputStream;
+					tmp = inputStream2String(in);
+		            area.setText(tmp); 
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				clear.setEnabled(true);
+				button.setEnabled(true);
+				
+			}
+		});
+		
 		clear = new JButton();
 		clear.setText("Clear");
+		clear.setEnabled(false);
 		clear.addActionListener(
 				new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						path = "";
-						area.setText("");
+						resultArea.setText("");
 						Xpath.setText("");
 					}
 			} );
 		
+		
+		
 		XpathPanel.add(Xpath);
 		XpathPanel.add(button);
 		XpathPanel.add(clear);
+		XpathPanel.add(open);
+		XpathPanel.add(resultArea);
 		XpathPanel.add(area);
+		XpathPanel.add(new JScrollPane(area));
+		XpathPanel.add(new JScrollPane(resultArea));
 		
 		this.setTitle("XMLBdD administrator v1.0");
-		this.setSize(600, 400);
+		this.setSize(800, 600);
 		this.setVisible(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}	  
 	 
-	 //analyse le XPATH et affiche sur le textarea
     public void read() {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = dbf.newDocumentBuilder();
-            //InputStream in = XPathParser.class.getClassLoader().getResourceAsStream(filePath);
-            Document doc = builder.parse(File);
+            
+            InputStream in = new FileInputStream(file);
+            
+            Document doc = builder.parse(in);
             XPathFactory factory = XPathFactory.newInstance();
             XPath xpath = factory.newXPath();
             XPathExpression expr = xpath.compile(path);
             NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-            for (int i = 0; i < nodes.getLength(); i++) {
-                System.out.println("name = " + nodes.item(i).getNodeValue());
-                area.setText("name = " + nodes.item(i).getNodeValue());
-                    }
+            String sub = "@";
+            int tmp = path.indexOf(sub);
+            if (tmp >= 0) 
+            {
+            	for (int i = 0; i < nodes.getLength(); i++) 
+            	{
+                    System.out.println(nodes.item(i).getNodeName() + " = " + nodes.item(i).getNodeValue());
+                    resultArea.append(nodes.item(i).getNodeName() + " = " + nodes.item(i).getNodeValue()+"\n");
+                    
+                }
+				
+			} 
+            else 
+            {
+            	for (int i = 0; i < nodes.getLength(); i++) 
+            	{
+                    System.out.println(nodes.item(i).getNodeName() + " = " + nodes.item(i).getTextContent());
+                    resultArea.append(nodes.item(i).getNodeName() + " = " + nodes.item(i).getTextContent()+"\n");
+            	}
+			}
+          
         } catch (XPathExpressionException e) {
             e.printStackTrace();
         } catch (ParserConfigurationException e) {
@@ -146,5 +211,40 @@ public class XPathParser extends JFrame{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }	
-}
+    }
+    
+    public void openFile() {
+		JFileChooser open = new JFileChooser();
+		open.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		open.removeChoosableFileFilter(open.getFileFilter());
+		FileFilter filter = new FileFilter();
+		open.setFileFilter(filter);
+	    open.showOpenDialog(null);
+	    file = open.getSelectedFile();
+  	}
+    
+    public static String inputStream2String(InputStream is) throws IOException{ 
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+        int i=-1; 
+        while((i=is.read())!=-1){ 
+        baos.write(i); 
+        } 
+       return baos.toString(); 
+    }
+    
+    class FileFilter extends javax.swing.filechooser.FileFilter {
+    	   public boolean accept( File f ) {
+    	      if( f.isDirectory() || f.getName().endsWith( ".xml" ) ) {
+    	         return true;
+    	      } else {
+    	         return false;
+    	      }
+    	   }
+	   public String getDescription() {
+		      return "xml";
+		   }
+		}
+	    
+	}
+
+
