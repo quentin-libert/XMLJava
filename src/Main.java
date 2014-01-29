@@ -35,6 +35,7 @@ public class Main {
 	private HashMap<String, Table> Tables;
 	private Formulaire form;
 	private JPanel container = new JPanel();
+	private DataBase runningDb;
 
 	/**
 	 * Launch the application.
@@ -189,6 +190,7 @@ public class Main {
 		
 		// CREATION DES FORMULAIRES
 		form = new Formulaire(new Parser(xml.fichier));
+		this.runningDb = form.getParser().db;
 		List<Table> tables = form.getParser().db.getTables();
 		Tables = new HashMap<String, Table>();
 		for(Table tb : tables){
@@ -241,7 +243,7 @@ public class Main {
 	public void XPathQueries(){
 		xml = new MyFileChooser();
 		xml.chooseXML();
-		XPathParser xparser = new XPathParser(xml.fichier);
+		XPathParser xparser = new XPathParser();
 		xparser.setVisible(true);
 	}
 	
@@ -250,8 +252,10 @@ public class Main {
 	}
 	
 	public void saveAsFile() {
-		JFileChooser save = new JFileChooser();
-		save.showSaveDialog(null);
+		//JFileChooser save = new JFileChooser();
+		//save.showSaveDialog(null);
+		XMLBuilder builder = new XMLBuilder(runningDb);
+		builder.BuildXMLFile("");
 	}
 	
 	public void closeApp() {

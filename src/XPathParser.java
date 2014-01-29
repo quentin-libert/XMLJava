@@ -1,6 +1,3 @@
-package XMLModule2_2013;
-
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -164,7 +161,7 @@ public class XPathParser extends JFrame{
 		this.setTitle("XMLBdD administrator v1.0");
 		this.setSize(800, 600);
 		this.setVisible(true);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.ABORT);
 	}	  
 	 
     public void read() {

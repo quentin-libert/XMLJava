@@ -21,11 +21,11 @@ public class Parser {
 			Document doc = db.parse(fichier);
 			parseXML(doc);
 		} catch (ParserConfigurationException e) {
-			System.out.println("problème lors de la definition du DocumentBuilder");
+			System.out.println("problÃ¨me lors de la definition du DocumentBuilder");
 		} catch (SAXException e) {
-			System.out.println("problème lors de l'ouverture du fichier");
+			System.out.println("problÃ¨me lors de l'ouverture du fichier");
 		} catch (IOException e) {
-			System.out.println("fichier non trouvé");
+			System.out.println("fichier non trouvÃ©");
 		}
 	}
 
