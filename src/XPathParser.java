@@ -77,13 +77,11 @@ public class XPathParser extends JFrame{
 			
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
+			
 			}
 			
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -117,7 +115,7 @@ public class XPathParser extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				openFile();
 				FileInputStream fileInputStream;
 				String tmp = "";
@@ -127,10 +125,10 @@ public class XPathParser extends JFrame{
 					tmp = inputStream2String(in);
 		            area.setText(tmp); 
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
+				
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				clear.setEnabled(true);
