@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
 import java.awt.Toolkit;
@@ -93,7 +95,7 @@ public class Main {
         JMenu help = new JMenu("?");
 
         JMenuItem fileNew = new JMenuItem("Nouveau", iconNew);
-        fileNew.setToolTipText("Cr�er un nouveau fichier");
+        fileNew.setToolTipText("Créer un nouveau fichier");
         fileNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
         
         fileNew.addActionListener(new ActionListener() {
@@ -181,7 +183,7 @@ public class Main {
     }
 	
 	public void newFile() {
-		JOptionPane.showMessageDialog(null,"Afin de cr�er votre nouvelle base de donn�es, merci de s�lectionner un fichier xml de structure de type Module 1");
+		JOptionPane.showMessageDialog(null,"Afin de créer votre nouvelle base de données, merci de sélectionner un fichier xml de structure de type Module 1");
 		xml = new MyFileChooser();
 		xml.chooseXML();
 		
@@ -206,10 +208,20 @@ public class Main {
 		
 		comboContainer.add(label);
 		comboContainer.add(combo);
-		frame.getContentPane().add(comboContainer, BorderLayout.NORTH);
-		frame.setVisible(true);
 		
-		//form.BuildUI(frame);
+		/*JButton buttonAdd = new JButton("View Results");
+		buttonAdd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	for(Table t : form.getParser().db.getTables()){
+            		JOptionPane.showMessageDialog(null, t.SeeRow());
+            	}
+            }
+        });*/
+		
+
+		frame.getContentPane().add(comboContainer, BorderLayout.NORTH);
+		//frame.getContentPane().add(buttonAdd, BorderLayout.WEST);
+		frame.setVisible(true);
 
 	}
 	
@@ -234,7 +246,7 @@ public class Main {
 	}
 	
 	public void saveFile() {
-		JOptionPane.showMessageDialog(null, "Tu as lanc� la fonction \"Save\"");
+		JOptionPane.showMessageDialog(null, "Tu as lancé la fonction \"Save\"");
 	}
 	
 	public void saveAsFile() {
@@ -247,7 +259,9 @@ public class Main {
 	}
 	
 	public void infosApp() {
-		JOptionPane.showMessageDialog(null, "Tu as lanc� la fonction \"infosApp\"");
+		String message = "Projet XML - XMLBdD Administrator v1.0 \n";
+		message += "Création Q. Libert - R. Leichnig - B. Graux - W. Qian \n";
+		JOptionPane.showMessageDialog(null, message);
 	}
 
 }

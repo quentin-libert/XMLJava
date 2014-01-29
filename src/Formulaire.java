@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.sql.RowSet;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -17,6 +18,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolTip;
 
@@ -24,6 +27,9 @@ import javax.swing.JToolTip;
 public class Formulaire {
 	private Parser parser;
 	private DataBase db;
+	private Table currentTable;
+	private DynamicTableModel model;
+	JTable dataTable;
 	
 	public Formulaire(Parser parser) {
 		this.parser = parser;
@@ -98,7 +104,8 @@ public class Formulaire {
 	}
 	
 	public void BuildUIForSingleTable(JPanel container, Table tb){
-		JPanel panel = new JPanel();
+		currentTable = tb;
+		final JPanel panel = new JPanel();
 		BoxLayout box = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
 		panel.setLayout(box);
 		
@@ -106,35 +113,64 @@ public class Formulaire {
 		colContainer.setLayout(new BoxLayout(colContainer, BoxLayout.PAGE_AXIS));
 		
 		final List<JTextField> fields = new ArrayList<JTextField>();
+		final List<String> colNames = new ArrayList<String>();
 		for(Column col : tb.getColumns()){
 			JPanel singleCol = new JPanel();
 			JLabel label = new JLabel(col.getName());
 			label.setPreferredSize(new Dimension(120, 30));
 			JTextField txtField = new JTextField();
 			fields.add(txtField);
+			colNames.add(col.getName());
 			txtField.setPreferredSize(new Dimension(180, 30));
 			singleCol.add(label);
 			singleCol.add(txtField);
 			colContainer.add(singleCol);
 		}
 		
-		panel.add(colContainer);
+		List<String> headers = new ArrayList<String>();
+		for(Column col : currentTable.getColumns())
+			headers.add(col.getName());
 		
+		this.model = new DynamicTableModel(currentTable.getRows(), headers);
+		dataTable = new JTable(model);
+
 		JButton buttonAdd = new JButton("Add");
 		buttonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	String values = "";
+            	Row r = new Row();
             	for (JTextField field : fields){
-            		values += field.getText() + "|";
+            		r.addRecord(new Record(colNames.get(fields.indexOf(field)), field.getText()));
             		field.setText("");
             	}
-        		JOptionPane.showMessageDialog(null, values);
+            	currentTable.addRow(r);
+            	model.addRow(r);
             }
         });
 		
-		panel.add(buttonAdd);
-		int height = ((tb.getColumns().size() * 30) + 30) * 4;
-		panel.add(Box.createVerticalStrut(height));
+		JButton buttonRem = new JButton("Remove");
+		buttonRem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	int[] selection = dataTable.getSelectedRows();
+ 
+            	for(int i = selection.length - 1; i >= 0; i--){
+            		model.removeRow(selection[i]);
+            		currentTable.RemoveRow(selection[i]);
+            	}
+            }
+        });
+		
+		JPanel btnContainer = new JPanel();
+		btnContainer.setLayout(new BoxLayout(btnContainer, BoxLayout.LINE_AXIS));
+		btnContainer.add(buttonAdd);
+		btnContainer.add(buttonRem);
+		
+		
+		dataTable.setPreferredSize(new Dimension(1200, 300));
+		colContainer.setPreferredSize(new Dimension(1200, 400));
+		colContainer.add(btnContainer);
+		colContainer.add(Box.createVerticalStrut(400));
+		panel.add(new JScrollPane(dataTable));
+		panel.add(colContainer);
 		container.add(panel, BorderLayout.CENTER);
 	}
 	
