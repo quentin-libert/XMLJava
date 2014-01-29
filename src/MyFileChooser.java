@@ -24,4 +24,19 @@ public class MyFileChooser extends JFileChooser {
 		}
 	}
 	
+	public void chooseDirectoryToSave(DataBase db){
+		JFileChooser chooser = new JFileChooser();
+	    chooser.setCurrentDirectory(new java.io.File("."));
+	    chooser.setDialogTitle("choosertitle");
+	    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	    chooser.setAcceptAllFileFilterUsed(false);
+
+	    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			XMLBuilder builder = new XMLBuilder(db);
+			builder.BuildXMLFile(chooser.getSelectedFile().getPath());
+	    } else {
+	      System.out.println("bad selection");
+	    }
+	}
+	
 }

@@ -210,19 +210,8 @@ public class Main {
 		
 		comboContainer.add(label);
 		comboContainer.add(combo);
-		
-		/*JButton buttonAdd = new JButton("View Results");
-		buttonAdd.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	for(Table t : form.getParser().db.getTables()){
-            		JOptionPane.showMessageDialog(null, t.SeeRow());
-            	}
-            }
-        });*/
-		
 
 		frame.getContentPane().add(comboContainer, BorderLayout.NORTH);
-		//frame.getContentPane().add(buttonAdd, BorderLayout.WEST);
 		frame.setVisible(true);
 
 	}
@@ -252,10 +241,8 @@ public class Main {
 	}
 	
 	public void saveAsFile() {
-		//JFileChooser save = new JFileChooser();
-		//save.showSaveDialog(null);
-		XMLBuilder builder = new XMLBuilder(runningDb);
-		builder.BuildXMLFile("");
+		xml = new MyFileChooser();
+		xml.chooseDirectoryToSave(runningDb);
 	}
 	
 	public void closeApp() {

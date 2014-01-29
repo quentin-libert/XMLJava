@@ -27,15 +27,17 @@ public class XMLBuilder {
 			document.appendChild(rootElement);
 			
 			for(Table tb : db.getTables()){
-				Element table = document.createElement(tb.getName());  
-				rootElement.appendChild(table);
-				for (Row r : tb.getRows()){
-					Element row = document.createElement(tb.getName().substring(0, tb.getName().length()-1));  
-					table.appendChild(row);
-					for (Record rec : r.getRecords()){
-						Element elm = document.createElement(rec.getColumnName());  
-						elm.appendChild(document.createTextNode(rec.getValue()));  
-						row.appendChild(elm);  
+				if (tb.getRows().size() > 0){
+					Element table = document.createElement(tb.getName());  
+					rootElement.appendChild(table);
+					for (Row r : tb.getRows()){
+						Element row = document.createElement(tb.getName().substring(0, tb.getName().length()-1));  
+						table.appendChild(row);
+						for (Record rec : r.getRecords()){
+							Element elm = document.createElement(rec.getColumnName());  
+							elm.appendChild(document.createTextNode(rec.getValue()));  
+							row.appendChild(elm);  
+						}
 					}
 				}
 			}
@@ -43,7 +45,7 @@ public class XMLBuilder {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();  
 			Transformer transformer = transformerFactory.newTransformer();  
 			DOMSource domSource = new DOMSource(document);  
-			StreamResult streamResult = new StreamResult(new File("/Users/romanleichnig/Desktop/"+db.getDbName()+".xml"));  
+			StreamResult streamResult = new StreamResult(new File(fileLocation + "/" + db.getDbName()+".xml"));  
 				  
 			transformer.transform(domSource, streamResult);  
 				  
