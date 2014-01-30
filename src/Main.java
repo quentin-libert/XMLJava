@@ -263,8 +263,6 @@ public class Main {
 	}
 	
 	public void XPathQueries(){
-		xml = new MyFileChooser();
-		xml.chooseXML();
 		XPathParser xparser = new XPathParser();
 		xparser.setVisible(true);
 	}

@@ -1,3 +1,0 @@
-31012014-09:53:25	opening file /Users/romanleichnig/Documents/Projets/Java/XMLJava/Structures/XMLProject.xml for updating
-31012014-09:53:25	error while validating /Users/romanleichnig/Documents/Projets/Java/XMLJava/Structures/XMLProject.xml : cvc-elt.1 : Déclaration de l'élément 'database' introuvable.
-31012014-09:53:25	parsed /Users/romanleichnig/Documents/Projets/Java/XMLJava/Structures/XMLProject.xml for edit database

@@ -1,3 +1,0 @@
-31012014-13:55:01	opening file /Users/romanleichnig/Projets/Livrable XML/Application/Databases/XMLPROJECT.xml for updating
-31012014-13:55:01	error while validating /Users/romanleichnig/Projets/Livrable XML/Application/Databases/XMLPROJECT.xml : cvc-elt.1 : Déclaration de l'élément 'XMLPROJECT' introuvable.
-31012014-13:55:01	parsed /Users/romanleichnig/Projets/Livrable XML/Application/Databases/XMLPROJECT.xml for edit database

@@ -1,0 +1,8 @@
+31012014-17:01:52	opening file /Users/romanleichnig/Desktop/Clients.xml for updating
+31012014-17:01:52	error while validating /Users/romanleichnig/Desktop/Clients.xml : cvc-elt.1 : Déclaration de l'élément 'Clients' introuvable.
+31012014-17:01:52	parsed /Users/romanleichnig/Desktop/Clients.xml for edit database
+31012014-17:01:52	insert values 2 Dubois Joe joedubois@msn.com in table Clients from databse XMLPROJECT
+31012014-17:01:52	saving file /Users/romanleichnig/Desktop/Clients.xml
+31012014-17:01:52	opening file /Users/romanleichnig/Desktop/XMLPROJECT.xml for updating
+31012014-17:01:52	error while validating /Users/romanleichnig/Desktop/XMLPROJECT.xml : cvc-elt.1 : Déclaration de l'élément 'XMLPROJECT' introuvable.
+31012014-17:01:52	parsed /Users/romanleichnig/Desktop/XMLPROJECT.xml for edit database
