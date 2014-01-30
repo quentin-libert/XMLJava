@@ -39,6 +39,7 @@ public class Parser {
 		} catch (ParserConfigurationException e) {
 			System.out.println("problème lors de la definition du DocumentBuilder");
 		} catch (SAXException e) {
+			System.out.println(e.getMessage());
 			System.out.println("problème lors de l'ouverture du fichier");
 		} catch (IOException e) {
 			System.out.println("fichier non trouvé");
