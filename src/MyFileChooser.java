@@ -1,6 +1,7 @@
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 @SuppressWarnings("serial")
 public class MyFileChooser extends JFileChooser {
@@ -14,6 +15,7 @@ public class MyFileChooser extends JFileChooser {
 		FiltreSimple xml = new FiltreSimple("Fichier xml", ".xml");
 		JFileChooser newF = new JFileChooser(".");
 		newF.changeToParentDirectory();
+	    newF.setDialogTitle("Choisir un fichier .xml de structure");
 		newF.addChoosableFileFilter(xml);
 		newF.setFileFilter(xml);
 		newF.setAcceptAllFileFilterUsed(false);
@@ -27,7 +29,7 @@ public class MyFileChooser extends JFileChooser {
 	public String chooseDirectoryToSave(DataBase db){
 		JFileChooser chooser = new JFileChooser();
 	    chooser.setCurrentDirectory(new java.io.File("."));
-	    chooser.setDialogTitle("choosertitle");
+	    chooser.setDialogTitle("Choisir un répertoire");
 	    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 	    chooser.setAcceptAllFileFilterUsed(false);
 
@@ -35,7 +37,7 @@ public class MyFileChooser extends JFileChooser {
 			XMLBuilder builder = new XMLBuilder(db);
 			return builder.BuildXMLFile(chooser.getSelectedFile().getPath(), false);
 	    } else {
-	      System.out.println("bad selection");
+		  JOptionPane.showMessageDialog(null, "Veuillez sélectionner un répertoire !");
 	      return "";
 	    }
 	}
@@ -45,6 +47,7 @@ public class MyFileChooser extends JFileChooser {
 		JFileChooser newF = new JFileChooser(".");
 		newF.changeToParentDirectory();
 		newF.addChoosableFileFilter(xml);
+	    newF.setDialogTitle("Choisir un fichier .xml existant");
 		newF.setFileFilter(xml);
 		newF.setAcceptAllFileFilterUsed(false);
 		int retour = newF.showOpenDialog(this);

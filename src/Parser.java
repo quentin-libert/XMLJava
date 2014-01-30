@@ -37,12 +37,12 @@ public class Parser {
 			else
 				parseExistingFile(doc);
 		} catch (ParserConfigurationException e) {
-			System.out.println("problème lors de la definition du DocumentBuilder");
+			JOptionPane.showMessageDialog(null, "Echec lors de l'instanciation du DocumentBuilder !");
 		} catch (SAXException e) {
 			System.out.println(e.getMessage());
-			System.out.println("problème lors de l'ouverture du fichier");
+			JOptionPane.showMessageDialog(null, "Echec de l'ouverture du fichier !");
 		} catch (IOException e) {
-			System.out.println("fichier non trouvé");
+			JOptionPane.showMessageDialog(null, "Fichier introuvable !");
 		}
 	}
 	
@@ -120,10 +120,9 @@ public class Parser {
 	    Source fileToValidate = new StreamSource(fichier); 
 	    try{
 	    	schema.newValidator().validate(fileToValidate);
-	    	System.out.println("valid file");
 	    	return true;
 	    } catch (SAXException e) {
-	    	String message = "Fichier xml invalide ! \n ";
+	    	String message = "Fichier xml non validé par rapport au shcéma ! \n ";
 			JOptionPane.showMessageDialog(null, message + e.getMessage());
 			logger.Log("error while validating "+fichier.getAbsolutePath()+" : " + e.getMessage());
 	    	return false;

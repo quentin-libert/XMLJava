@@ -1,5 +1,6 @@
 import java.io.File;
 
+import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -54,10 +55,12 @@ public class XMLBuilder {
 			StreamResult streamResult = new StreamResult(new File(filePath));  
 				  
 			transformer.transform(domSource, streamResult);  
+			JOptionPane.showMessageDialog(null, "Le fichier a été enregistré.");
 			return filePath;
 			
 		} catch (Exception e) {
-			return "";
+			JOptionPane.showMessageDialog(null, "Erreur dans l'enregistrement du fichier.");
+			return null;
 		}
 	}
 }
