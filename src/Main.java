@@ -25,6 +25,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class Main {
 	private JPanel container = new JPanel();
 	private DataBase runningDb;
 	private String runningFile;
+	private Logger logger;
 
 	/**
 	 * Launch the application.
@@ -68,6 +70,7 @@ public class Main {
 	private void initialize() {
 		createFrame();
 		createMenu();
+		this.logger = new Logger();
 	}
 	
 	public void createFrame() {
@@ -154,7 +157,11 @@ public class Main {
 
         fileExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                System.exit(0);
+                try {
+					closeApp();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
             }
         });
 
@@ -189,9 +196,11 @@ public class Main {
 		JOptionPane.showMessageDialog(null,"Afin de créer votre nouvelle base de données, merci de sélectionner un fichier xml de structure de type Module 1");
 		xml = new MyFileChooser();
 		xml.chooseXML();
+		logger.Log("using struct " + xml.fichier.getAbsolutePath() + " in order to create a new database");
 		
 		// CREATION DES FORMULAIRES
-		form = new Formulaire(new Parser(xml.fichier, false));
+		frame.getContentPane().removeAll();
+		form = new Formulaire(new Parser(xml.fichier, false), logger);
 		this.runningDb = form.getParser().db;
 		List<Table> tables = form.getParser().db.getTables();
 		Tables = new HashMap<String, Table>();
@@ -230,8 +239,11 @@ public class Main {
 		xml = new MyFileChooser();
 		xml.chooseExistingXML();
 		this.runningFile = xml.fichier.getAbsolutePath();
+		logger.Log("opening file " + runningFile + " for updating");
 		
-		form = new Formulaire(new Parser(xml.fichier, true));
+
+		frame.getContentPane().removeAll();
+		form = new Formulaire(new Parser(xml.fichier, true), logger);
 		this.runningDb = form.getParser().db;
 		List<Table> tables = form.getParser().db.getTables();
 		Tables = new HashMap<String, Table>();
@@ -271,6 +283,7 @@ public class Main {
 				f.delete();
 				XMLBuilder builder = new XMLBuilder(runningDb);
 				this.runningFile = builder.BuildXMLFile(runningFile, true);
+				logger.Log("saving file " + runningFile);
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Il n'y a aucun fichier en cours d'édition !");
@@ -280,9 +293,11 @@ public class Main {
 	public void saveAsFile() {
 		xml = new MyFileChooser();
 		this.runningFile = xml.chooseDirectoryToSave(runningDb);
+		logger.Log("creating file " + runningFile + " for database " + runningDb);
 	}
 	
-	public void closeApp() {
+	public void closeApp() throws IOException {
+		logger.SaveLogs();
 		System.exit(0);
 	}
 	

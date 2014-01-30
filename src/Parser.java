@@ -95,6 +95,5 @@ public class Parser {
 				db.addTable(tb);
 		    }
 		}
-		System.out.println("done");
 	}
 }

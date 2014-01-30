@@ -20,7 +20,7 @@ public class Row {
 	public String seeRecords(){
 		String res = "";
 		for (Record r : Records){
-			res += r.getColumnName() + "-" + r.getValue() + "|";
+			res += r.getValue() + " ";
 		}
 		return res;
 	}

@@ -30,10 +30,12 @@ public class Formulaire {
 	private Table currentTable;
 	private DynamicTableModel model;
 	JTable dataTable;
+	Logger logger;
 	
-	public Formulaire(Parser parser) {
+	public Formulaire(Parser parser, Logger logger) {
 		this.parser = parser;
 		this.db = parser.db;
+		this.logger = logger;
 	}
 	
 	public void BuildUI(JFrame frame){
@@ -42,7 +44,8 @@ public class Formulaire {
 		gridConstraints.gridx = 0;
 		gridConstraints.gridy = 0;
 		int tableCount = 0;
-
+		
+		final Table currentTb; 
 		for(Table tb : db.getTables()){
 			tableCount++;
 			JPanel container = new JPanel();
@@ -85,7 +88,7 @@ public class Formulaire {
                 public void actionPerformed(ActionEvent e) {
                 	String values = "";
                 	for (JTextField field : fields){
-                		values += field.getText() + "|";
+                		values += field.getText() + " ";
                 		field.setText("");
                 	}
             		JOptionPane.showMessageDialog(null, values);
@@ -138,10 +141,14 @@ public class Formulaire {
 		buttonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	Row r = new Row();
+            	String msg = "insert values ";
             	for (JTextField field : fields){
             		r.addRecord(new Record(colNames.get(fields.indexOf(field)), field.getText()));
+            		msg += field.getText() + " ";
             		field.setText("");
             	}
+            	msg += "in table " + currentTable.getName() + " from databse " + db.getDbName();
+            	logger.Log(msg);
             	currentTable.addRow(r);
             	model.addRow(r);
             }
@@ -151,9 +158,9 @@ public class Formulaire {
 		buttonRem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	int[] selection = dataTable.getSelectedRows();
- 
             	for(int i = selection.length - 1; i >= 0; i--){
             		model.removeRow(selection[i]);
+                	logger.Log("remove row " + currentTable.getRows().get(selection[i]).seeRecords() + "in table " + currentTable.getName() + " from databse " + db.getDbName());
             		currentTable.RemoveRow(selection[i]);
             	}
             }
