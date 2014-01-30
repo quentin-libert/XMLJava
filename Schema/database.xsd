@@ -1,0 +1,61 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+            targetNamespace="http://www.xmlproject.fr" 
+            xmlns="http://www.xmlproject.fr" 
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xsd:element name="databases">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="database" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="metaInformations" type="MetaInformations" minOccurs="1" maxOccurs="1"/>
+                            <xsd:element name="tables" type="Tables" minOccurs="0" maxOccurs="1" />
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+	
+    <xsd:complexType name="MetaInformations">
+        <xsd:sequence>
+            <xsd:element name="dbName" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="creatorName" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="creationDate" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+	
+    <xsd:complexType name="Tables">
+        <xsd:sequence>
+            <xsd:element name="table" type="Table" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="Table">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="columns" type="Columns" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="Columns">
+        <xsd:sequence>
+            <xsd:element name="column" type="Column" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="ForeignKey">
+        <xsd:sequence>
+            <xsd:element name="columnName" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="tableName" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="Column">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="type" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

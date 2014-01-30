@@ -1,26 +1,37 @@
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 public class Parser {
 	public DataBase db;
+	File fichier;
+	Logger logger;
 	
-	public Parser(File fichier, boolean existingXML) {
+	public Parser(File fichier, boolean existingXML, Logger logger) {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
+		this.logger = logger;
+		this.fichier = fichier;
 		try {
 			db = dbf.newDocumentBuilder();
 			Document doc = db.parse(fichier);
+			validateXML();
+	
 			if (!existingXML)
 				parseXML(doc);
 			else
@@ -56,6 +67,8 @@ public class Parser {
 			}
 			db.addTable(t);
 		}
+
+		logger.Log("parsed "+fichier.getAbsolutePath()+" for create database");
 	}
 	
 	private void parseExistingFile(Document doc){
@@ -95,5 +108,24 @@ public class Parser {
 				db.addTable(tb);
 		    }
 		}
+
+		logger.Log("parsed "+fichier.getAbsolutePath()+" for edit database");
+	}
+
+	private Boolean validateXML() throws SAXException, IOException{
+		String language = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+	    SchemaFactory factory = SchemaFactory.newInstance(language);
+	    Schema schema = factory.newSchema(new File(System.getProperty("user.dir") + "/Schema/"+"database.xsd"));
+	    Source fileToValidate = new StreamSource(fichier); 
+	    try{
+	    	schema.newValidator().validate(fileToValidate);
+	    	System.out.println("valid file");
+	    	return true;
+	    } catch (SAXException e) {
+	    	String message = "Fichier xml invalide ! \n ";
+			JOptionPane.showMessageDialog(null, message + e.getMessage());
+			logger.Log("error while validating "+fichier.getAbsolutePath()+" : " + e.getMessage());
+	    	return false;
+	    }
 	}
 }

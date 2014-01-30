@@ -1,13 +1,9 @@
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -15,14 +11,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
+import org.xml.sax.SAXException;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -200,7 +197,7 @@ public class Main {
 		
 		// CREATION DES FORMULAIRES
 		frame.getContentPane().removeAll();
-		form = new Formulaire(new Parser(xml.fichier, false), logger);
+		form = new Formulaire(new Parser(xml.fichier, false, logger), logger);
 		this.runningDb = form.getParser().db;
 		List<Table> tables = form.getParser().db.getTables();
 		Tables = new HashMap<String, Table>();
@@ -243,7 +240,7 @@ public class Main {
 		
 
 		frame.getContentPane().removeAll();
-		form = new Formulaire(new Parser(xml.fichier, true), logger);
+		form = new Formulaire(new Parser(xml.fichier, true, logger), logger);
 		this.runningDb = form.getParser().db;
 		List<Table> tables = form.getParser().db.getTables();
 		Tables = new HashMap<String, Table>();
